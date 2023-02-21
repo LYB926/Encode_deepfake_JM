@@ -6,7 +6,7 @@ from jmgen import generate
 # 使用ffprobe指令，遍历同目录下所有文件，获取其分辨率、帧的数量和帧率
 # 同时使用ffmpeg将所有文件转为YUV
 # raw_mp4 = [f for f in os.listdir() if os.path.isfile(f)]
-path = "/root/deepfakees/"    #指定视频源文件（mp4）的目录
+path = "/root/deepfake/"    #指定视频源文件（mp4）的目录
 raw_mp4 = glob.glob(path + "*.mp4")
 # 四个list分别记录视频名称、分辨率、帧数量和帧率
 fileName    = []
