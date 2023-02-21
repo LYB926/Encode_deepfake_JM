@@ -7,8 +7,8 @@ import glob
 # raw_mp4 = [f for f in os.listdir() if os.path.isfile(f)]
 path = "/root/deepfakees/"    #指定视频源文件（mp4）的目录
 raw_mp4 = glob.glob(path + "*.mp4")
-# 四个list分别记录视频路径、分辨率、帧数量和帧率
-filePath    = []
+# 四个list分别记录视频名称、分辨率、帧数量和帧率
+fileName    = []
 width       = []
 height      = []
 frameNumber = []
@@ -19,8 +19,15 @@ for vid in raw_mp4:
     ret = subprocess.getoutput(cmd).split()
     print(vid, ret)         #输出ffprobe得到的信息
     # 记录ffprobe输出信息
-    filePath.append(vid)    
+    fileName.append((vid.rsplit('/',1)[1]).split('.')[0])    
     width.append(ret[0]) 
     height.append(ret[1])
-    frameRate.append(ret[2].split('/'))
+    frameRate.append((ret[2].split('/'))[0])
     frameNumber.append(ret[3])
+
+# 使用ffmpeg将视频转为YUV，若已转换完成，注释此节
+for i in range(len(fileName)):
+    cmd_yuv = "ffmpeg -i " + path + fileName[i] + ".mp4 -s " + width[i] + "x" + height[i] + " -pix_fmt yuv420p " + path + fileName[i] + ".yuv"
+    os.system(cmd_yuv)
+
+# 生成
