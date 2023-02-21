@@ -1,6 +1,7 @@
 import os
 import subprocess
 import glob
+from jmgen import generate
 # ####################
 # 使用ffprobe指令，遍历同目录下所有文件，获取其分辨率、帧的数量和帧率
 # 同时使用ffmpeg将所有文件转为YUV
@@ -30,4 +31,12 @@ for i in range(len(fileName)):
     cmd_yuv = "ffmpeg -i " + path + fileName[i] + ".mp4 -s " + width[i] + "x" + height[i] + " -pix_fmt yuv420p " + path + fileName[i] + ".yuv"
     os.system(cmd_yuv)
 
-# 生成
+# 生成每个视频的JM编码器配置文件
+shName = 'deepfake_JM.sh'      
+shFile = open(shName, mode='w', encoding='utf-8')
+for i in range(len(fileName)):
+    generate(path, fileName[i], frameNumber[i], frameRate[i], width[i], height[i])
+    shFile.write('./lencod.exe -f ' + fileName[i] + '.cfg > ' + fileName[i] + '.log &\n')
+shFile.write('wait\n')
+shFile.close()
+os.system('chmod 777 ' + shName)
