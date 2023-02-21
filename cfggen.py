@@ -37,6 +37,8 @@ shFile = open(shName, mode='w', encoding='utf-8')
 for i in range(len(fileName)):
     generate(path, fileName[i], frameNumber[i], frameRate[i], width[i], height[i])
     shFile.write('./lencod.exe -f ' + fileName[i] + '.cfg > ' + fileName[i] + '.log &\n')
+    if (i%60==0):
+        shFile.write("wait\n")
 shFile.write('wait\n')
 shFile.close()
 os.system('chmod 777 ' + shName)
